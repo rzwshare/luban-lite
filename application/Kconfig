@@ -1,0 +1,221 @@
+menu "Application options"
+
+#============================================
+# Filesystem related:
+#============================================
+
+comment "Filesystem related"
+
+menuconfig AIC_USING_FS_IMAGE_0
+    bool "Using File System Image 0"
+    default n
+
+if AIC_USING_FS_IMAGE_0
+choice
+    prompt "Select File System Type"
+    default AIC_USING_FS_IMAGE_TYPE_LITTLEFS_FOR_0
+    config AIC_USING_FS_IMAGE_TYPE_FATFS_FOR_0
+        bool "FATFS"
+    config AIC_USING_FS_IMAGE_TYPE_UFFS_FOR_0
+        bool "UFFS"
+    config AIC_USING_FS_IMAGE_TYPE_LITTLEFS_FOR_0
+        bool "LittleFS"
+endchoice
+
+config AIC_FS_IMAGE_DIR_0
+    string "Data Directory"
+    default "packages/artinchip/lvgl-apps/base_demo/lvgl_src/"
+
+config AIC_FS_IMAGE_NAME_0
+    string "Image Name"
+    default "app.lfs"
+
+if AIC_USING_FS_IMAGE_TYPE_FATFS_FOR_0
+config AIC_FATFS_AUTO_SIZE_FOR_0
+    bool "auto calcuate image size"
+    default y
+config AIC_FATFS_SECTOR_SIZE_FOR_0
+    int "sector size"
+    depends on !AIC_FATFS_AUTO_SIZE_FOR_0
+    default 512
+
+config AIC_FATFS_SECTOR_COUNT_FOR_0
+    int "sector count"
+    depends on !AIC_FATFS_AUTO_SIZE_FOR_0
+    default 2048
+
+endif
+
+# Parameters for LittleFS
+if AIC_USING_FS_IMAGE_TYPE_LITTLEFS_FOR_0
+config AIC_LITTLEFS_BLOCK_SIZE_FOR_0
+    int "Erase block size"
+    default 4096
+config AIC_LITTLEFS_PAGE_SIZE_FOR_0
+    int "Page size"
+    default 256
+endif
+
+endif
+
+menuconfig AIC_USING_FS_IMAGE_1
+    bool "Using File System Image 1"
+    default n
+
+if AIC_USING_FS_IMAGE_1
+choice
+    prompt "Select File System Type"
+    default AIC_USING_FS_IMAGE_TYPE_LITTLEFS_FOR_1
+    config AIC_USING_FS_IMAGE_TYPE_FATFS_FOR_1
+        bool "FATFS"
+    config AIC_USING_FS_IMAGE_TYPE_UFFS_FOR_1
+        bool "UFFS"
+    config AIC_USING_FS_IMAGE_TYPE_LITTLEFS_FOR_1
+        bool "LittleFS"
+endchoice
+
+config AIC_FS_IMAGE_DIR_1
+    string "Data Directory"
+    default "fs_user"
+
+config AIC_FS_IMAGE_NAME_1
+    string "Image Name"
+    default "user"
+
+if AIC_USING_FS_IMAGE_TYPE_FATFS_FOR_1
+config AIC_FATFS_AUTO_SIZE_FOR_1
+    bool "auto calcuate image size"
+    default y
+config AIC_FATFS_SECTOR_SIZE_FOR_1
+    int "sector size"
+    depends on !AIC_FATFS_AUTO_SIZE_FOR_1
+    default 512
+
+config AIC_FATFS_SECTOR_COUNT_FOR_1
+    int "sector count"
+    depends on !AIC_FATFS_AUTO_SIZE_FOR_1
+    default 2048
+endif
+
+# Parameters for LittleFS
+if AIC_USING_FS_IMAGE_TYPE_LITTLEFS_FOR_1
+config AIC_LITTLEFS_BLOCK_SIZE_FOR_1
+    int "Erase block size"
+    default 4096
+config AIC_LITTLEFS_PAGE_SIZE_FOR_1
+    int "Page size"
+    default 256
+endif
+
+endif
+
+if AIC_USING_FS_IMAGE_TYPE_FATFS_FOR_0 || AIC_USING_FS_IMAGE_TYPE_FATFS_FOR_1
+    config AIC_USING_FS_IMAGE_TYPE_FATFS_CLUSTER_SIZE
+        int "size of cluster in fatfs image"
+        default 8
+
+    config AIC_FATFS_ENABLE_WRITE_IN_SPINOR
+        bool "FATFS enable write func in spinor"
+        depends on AIC_SPINOR_DRV
+        default n
+endif
+
+config GENERATE_BURNER_IMAGE
+    bool "Generate burner format image"
+    default n
+
+comment "LVGL demo select related"
+
+# Kconfig file for package LVGL
+menuconfig LPKG_USING_LVGL
+    bool "LVGL (official): powerful and easy-to-use embedded GUI library"
+    default n
+
+if LPKG_USING_LVGL
+
+    config LPKG_LVGL_PATH
+        string
+        default "/packages/multimedia/LVGL/LVGL"
+
+    config LPKG_LVGL_THREAD_PRIO
+        int "Priority of LVGL thread"
+        default 20
+
+    config LPKG_LVGL_THREAD_STACK_SIZE
+        int "Stack size of LVGL thread"
+        default 4096
+
+    config LPKG_LVGL_DISP_REFR_PERIOD
+        int "Display refresh period (ms)"
+        default 5 # official suggestion
+
+    config LPKG_USING_LVGL_SQUARELINE
+        bool "Support SquareLine Studio"
+        default n
+
+    config LPKG_LVGL_USING_EXAMPLES
+        bool "Enable built-in examples"
+        default n
+
+    config LPKG_LVGL_USING_DEMOS
+        bool "Enable built-in demos"
+        default n
+
+endif
+
+menuconfig AIC_LVGL_DEMO
+    tristate "ArtInChip LVGL demo"
+    select LPKG_USING_LVGL
+    default n
+
+if AIC_LVGL_DEMO
+choice
+    prompt "select LVGL demo"
+    default AIC_LVGL_BASE_DEMO
+    depends on AIC_LVGL_DEMO
+
+config AIC_LVGL_BASE_DEMO
+    bool "LVGL demo with basic function"
+
+config AIC_LVGL_METER_DEMO
+    bool "LVGL demo of meter"
+
+config AIC_LVGL_LAUNCHER_DEMO
+    bool "LVGL launcher demo"
+
+config AIC_LVGL_DASHBOARD_DEMO
+    bool "LVGL dashboard demo"
+
+if KERNEL_BAREMETAL
+    config AIC_LVGL_GIF_DEMO
+        bool "LVGL gif demo"
+endif
+
+config AIC_LVGL_SDBATTERY
+    bool "LVGL  with sdbattery function"
+
+config AIC_LVGL_AIOBATTERY
+    bool "LVGL  with aiobattery function"
+endchoice
+
+config LV_COLOR_DEPTH
+    int "LVGL color depth(32/16)"
+    default 32
+    depends on LPKG_USING_LVGL
+config LV_CACHE_IMG_NUM
+    int "LVGL image cached number"
+    default 2
+    depends on LPKG_USING_LVGL
+# Parameters for LVGL meter demo
+if AIC_LVGL_METER_DEMO
+    config LV_METER_SIMPLE_POINT
+        bool "LVGL meter demo use simple point"
+        default n
+endif
+endif
+
+config LVGL_STORAGE_PATH
+    string "LVGL Resource Directory"
+    default "/rodata/lvgl_data"
+endmenu
+

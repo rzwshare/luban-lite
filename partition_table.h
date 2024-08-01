@@ -1,0 +1,19 @@
+/* This is an auto generated file, please don't modify it. */
+
+#ifndef _AIC_IMAGE_CFG_JSON_PARTITION_TABLE_H_
+#define _AIC_IMAGE_CFG_JSON_PARTITION_TABLE_H_
+
+#define IMAGE_CFG_JSON_PARTS_MTD "spi0.0:256k(spl),2m(os),3m(rodata),2m(data)"
+
+
+#ifdef FAL_PART_HAS_TABLE_CFG
+#define FAL_PART_TABLE \
+{ \
+    {FAL_PART_MAGIC_WORD, "spl",FAL_USING_NOR_FLASH_DEV_NAME, 0,262144,0}, \
+    {FAL_PART_MAGIC_WORD, "os",FAL_USING_NOR_FLASH_DEV_NAME, 262144,2097152,0}, \
+    {FAL_PART_MAGIC_WORD, "rodata",FAL_USING_NOR_FLASH_DEV_NAME, 2359296,3145728,0}, \
+    {FAL_PART_MAGIC_WORD, "data",FAL_USING_NOR_FLASH_DEV_NAME, 5505024,2097152,0}, \
+}
+#endif
+
+#endif

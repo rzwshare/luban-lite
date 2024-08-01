@@ -1,0 +1,51 @@
+/*
+ * Copyright (C) 2022-2023 ArtinChip Technology Co., Ltd.
+ * Authors:  Ning Fang <ning.fang@artinchip.com>
+ */
+
+#ifndef BASE_UI_H
+#define BASE_UI_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "lvgl.h"
+#include "aic_ui.h"
+#if 1
+typedef struct {
+	int cluster_battery_id;
+    int cluster_battery_num;
+	int cluster_battery1_soc;
+	int cluster_battery2_soc;
+	int cluster_battery3_soc;
+	int cluster_battery4_soc;
+   // int cluster_x;
+	//int cluster_y;
+	
+} cluster_t;
+
+typedef	struct  {
+	    lv_obj_t  *battery_img;
+		lv_obj_t  *battery_label;
+		lv_obj_t  *battery_label1;
+	    int battery_id;
+ }battery_id_info_list_t;
+
+static battery_id_info_list_t battery_id_info_list[12] ;
+static battery_id_info_list_t old_battery_id_info_list[12] ;
+#define CLUSTERNUM    3
+cluster_t cluster[CLUSTERNUM];
+cluster_t cluster_show[CLUSTERNUM];
+void cluster_init(void);
+
+
+#endif
+void sdbattery_ui_init();
+
+
+#ifdef __cplusplus
+} /*extern "C"*/
+#endif
+
+#endif //BASE_UI_H
